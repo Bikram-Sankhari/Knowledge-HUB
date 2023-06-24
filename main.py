@@ -41,7 +41,7 @@ class BlogPost(db.Model):
     subtitle = db.Column(db.String(250), nullable=False)
     date = db.Column(db.String(250), nullable=False)
     body = db.Column(db.Text, nullable=False)
-    img_url = db.Column(db.String(250), nullable=False)
+    img_url = db.Column(db.String, nullable=False)
 
     author: Mapped["User"] = relationship(back_populates="user_blog")
     blog_comment: Mapped[List["Comments"]] = relationship(back_populates="comment_blog")
