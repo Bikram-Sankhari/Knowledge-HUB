@@ -27,7 +27,8 @@ Bootstrap(app)
 login_manager.init_app(app)
 
 # CONNECT TO DB
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql+psycopg2://blog_users_omn5_user:ioZZFtsn0OCufl3t32XxJAKlefh1ajgR@dpg-cibkv2p5rnuk9q9g3q3g-a.singapore-postgres.render.com/blog_users_omn5"
+sql_string = "postgresql+psycopg2://blog_database_w1oy_user:cpoN8qBNFTvQFEiqOExcsk5d6D6kQx4R@dpg-cibm1faip7vnjjnrojkg-a.singapore-postgres.render.com/blog_database_w1oy"
+app.config['SQLALCHEMY_DATABASE_URI'] = sql_string
 db = SQLAlchemy(app)
 
 
@@ -41,7 +42,7 @@ class BlogPost(db.Model):
     subtitle = db.Column(db.String(250), nullable=False)
     date = db.Column(db.String(250), nullable=False)
     body = db.Column(db.Text, nullable=False)
-    img_url = db.Column(db.Text, nullable=False)
+    img_url = db.Column(db.String, nullable=False)
 
     author: Mapped["User"] = relationship(back_populates="user_blog")
     blog_comment: Mapped[List["Comments"]] = relationship(back_populates="comment_blog")
