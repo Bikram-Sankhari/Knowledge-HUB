@@ -10,3 +10,4 @@ WTForms
 Werkzeug
 Flask-SQLAlchemy
 gunicorn
+psycopg2
