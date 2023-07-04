@@ -13,7 +13,7 @@ from typing import List
 import ssl, smtplib, os
 from dotenv import load_dotenv
 
-load_dotenv("secrets.env")
+load_dotenv("/etc/secrets/secrets.env")
 
 login_manager = LoginManager()
 app = Flask(__name__)
