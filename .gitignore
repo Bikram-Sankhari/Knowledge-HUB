@@ -1,3 +1,5 @@
 *.env
 My Website URL.txt
 /.idea/
+__pycache__/
+.venv/
