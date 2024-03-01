@@ -31,7 +31,8 @@ Bootstrap(app)
 login_manager.init_app(app)
 
 # CONNECT TO DB
-sql_string = "postgresql+psycopg2://blog_database_w1oy_user:cpoN8qBNFTvQFEiqOExcsk5d6D6kQx4R@dpg-cibm1faip7vnjjnrojkg-a.singapore-postgres.render.com/blog_database_w1oy"
+# sql_string = "postgresql+psycopg2://blog_database_w1oy_user:cpoN8qBNFTvQFEiqOExcsk5d6D6kQx4R@dpg-cibm1faip7vnjjnrojkg-a.singapore-postgres.render.com/blog_database_w1oy"
+sql_string = "sqlite:///blog_db"
 app.config['SQLALCHEMY_DATABASE_URI'] = sql_string
 db = SQLAlchemy(app)
 
@@ -48,8 +49,8 @@ class BlogPost(db.Model):
     body = db.Column(db.Text, nullable=False)
     img_url = db.Column(db.String, nullable=False)
 
-    author: Mapped["User"] = relationship(back_populates="user_blog")
-    blog_comment: Mapped[List["Comments"]] = relationship(back_populates="comment_blog")
+    author= relationship("User", back_populates="user_blog")
+    blog_comment= relationship("Comments", back_populates="comment_blog")
 
 
 class User(db.Model, UserMixin):
@@ -59,8 +60,8 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String, nullable=False, unique=True)
     password = db.Column(db.String, nullable=False)
 
-    user_blog: Mapped[List["BlogPost"]] = relationship(back_populates="author")
-    user_comment: Mapped[List["Comments"]] = relationship(back_populates="user")
+    user_blog = relationship("BlogPost", back_populates="author")
+    user_comment = relationship("Comments", back_populates="user")
 
 
 class Comments(db.Model):
@@ -70,8 +71,8 @@ class Comments(db.Model):
     user_id = db.Column(db.ForeignKey("user_table.id"))
     blog_id = db.Column(db.ForeignKey("blog_posts.id"))
 
-    user: Mapped["User"] = relationship(back_populates="user_comment")
-    comment_blog: Mapped["BlogPost"] = relationship(back_populates="blog_comment")
+    user = relationship("User", back_populates="user_comment")
+    comment_blog = relationship("BlogPost", back_populates="blog_comment")
 
 
 with app.app_context():
