@@ -1,5 +1,11 @@
-*.env
-My Website URL.txt
-/.idea/
+# Byte-compiled / optimized / DLL files
 __pycache__/
-.venv/
+
+
+
+# Database
+instance/
+
+# Environments
+env/
+.env

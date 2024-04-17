@@ -2,14 +2,14 @@
 
 <!-- Page Header -->
 <header class="masthead"
-        style="background-image: url('https://images.unsplash.com/photo-1470092306007-055b6797ca72?ixlib=rb-1.2.1&auto=format&fit=crop&w=668&q=80')">
+        style="background-image: url('https://images.pexels.com/photos/1029141/pexels-photo-1029141.jpeg')">
     <div class="overlay"></div>
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
                 <div class="site-heading">
-                    <h1>Sankhari's Blog</h1>
-                    <span class="subheading">A collection of random musings.</span>
+                    <h1>Knowledge HUB</h1>
+                    <span class="subheading">Roadmap to Wisdom</span>
                 </div>
             </div>
         </div>
@@ -20,8 +20,9 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
+            {% include "message.html" %}
             {% for post in all_posts %}
-            <div class="post-preview">
+            <div class="post-preview" style="margin-top: 20px;">
                 <a href="{{ url_for('show_post', post_id=post[0].id) }}">
                     <h2 class="post-title">
                         {{post[0].title}}

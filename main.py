@@ -4,16 +4,16 @@ from flask_ckeditor import CKEditor
 from datetime import date
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import relationship, Mapped
+from sqlalchemy.orm import relationship
 from sqlalchemy.exc import IntegrityError
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from forms import CreatePostForm, RegistrationForm, LoginForm, CommentForm
 from flask_gravatar import Gravatar
 from typing import List
 import ssl, smtplib, os
-from dotenv import load_dotenv
+from decouple import config
+from flask_wtf import CSRFProtect
 
-load_dotenv(os.path.abspath("/etc/secrets/secret.env"))
 
 login_manager = LoginManager()
 app = Flask(__name__)
@@ -29,9 +29,9 @@ gravatar = Gravatar(app,
                     base_url=None)
 Bootstrap(app)
 login_manager.init_app(app)
+csrf = CSRFProtect(app)
 
 # CONNECT TO DB
-# sql_string = "postgresql+psycopg2://blog_database_w1oy_user:cpoN8qBNFTvQFEiqOExcsk5d6D6kQx4R@dpg-cibm1faip7vnjjnrojkg-a.singapore-postgres.render.com/blog_database_w1oy"
 sql_string = "sqlite:///blog_db"
 app.config['SQLALCHEMY_DATABASE_URI'] = sql_string
 db = SQLAlchemy(app)
@@ -82,16 +82,16 @@ with app.app_context():
 def send_mail_to_user(email):
     context = ssl.create_default_context()
     with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as mail:
-        mail.login(os.getenv("MY_EMAIL"), os.getenv("MY_PASSWORD"))
-        mail.sendmail(os.getenv("MY_EMAIL"), email, msg=f"Subject:THANKS FOR YOUR INTEREST\n\nYour message has been "
+        mail.login(config("MY_EMAIL"), config("MY_PASSWORD"))
+        mail.sendmail(config("MY_EMAIL"), email, msg=f"Subject:THANKS FOR YOUR INTEREST\n\nYour message has been "
                                                         f"received and you will be attended shortly")
 
 
 def send_mail_to_self(name, email, mob, msg):
     context = ssl.create_default_context()
     with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as mail:
-        mail.login(os.getenv("MY_EMAIL"), os.getenv("MY_PASSWORD"))
-        mail.sendmail(os.getenv("MY_EMAIL"), os.getenv("MY_EMAIL"),
+        mail.login(config("MY_EMAIL"), config("MY_PASSWORD"))
+        mail.sendmail(config("MY_EMAIL"), config("MY_EMAIL"),
                       msg=f"Subject:NEW INTEREST\n\nName: {name}\nE-mail: {email}\nMob: {mob}\nMessage = {msg}")
 
 
@@ -138,9 +138,9 @@ def register():
                 flash("You have already signed up. Please enter your password to login")
                 return redirect(url_for("login"))
             else:
-                login_user(new_user)
+                flash("Account Registered Successfully. Please Login to Continue")
+                return redirect(url_for("login"))
 
-        return redirect(url_for("get_all_posts"))
     return render_template("register.html", form=form)
 
 
@@ -159,6 +159,7 @@ def login():
         else:
             if check_password_hash(pwhash=user[0].password, password=form.password.data):
                 login_user(user[0])
+                flash("You have Logged In Successfully !!!")
                 return redirect(url_for("get_all_posts"))
             else:
                 flash("Wrong Password")
@@ -169,7 +170,8 @@ def login():
 @app.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('get_all_posts'))
+    flash("Logged Out Successfully. See You Again")
+    return redirect(url_for('login'))
 
 
 @app.route("/post/<int:post_id>", methods=["GET", "POST"])

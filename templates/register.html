@@ -6,14 +6,14 @@
 
 <!-- Page Header -->
 <header class="masthead"
-        style="background-image: url('https://images.unsplash.com/photo-1531592937781-344ad608fabf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80')">
+        style="background-image: url('https://media.istockphoto.com/id/1286664973/photo/woman-climbs-the-stairs-from-darkness-to-light.jpg?s=612x612&w=0&k=20&c=AneVXlR2rmRQSs4t0eoV2s6KwoecaiCzzPFw6EVfqac=')">
     <div class="overlay"></div>
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
                 <div class="page-heading">
-                    <h1>Register</h1>
-                    <span class="subheading">Start Contributing to the Blog!</span>
+                    <h1>It All Starts Here</h1>
+                    <span class="subheading">Register & Start Contributing</span>
                 </div>
             </div>
         </div>
@@ -23,17 +23,23 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            <ul class=flashes>
-                {% for message in messages %}
-                <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-            {% endwith %}
-            {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
-
+            {% include "message.html" %}
+            <form action="" method="post">
+            <input id="csrf_token" name="csrf_token" type="hidden" value="{{csrf_token()}}">
+            {{ form.name.label(style="margin-top:20px") }}
+            <br>
+            {{ form.name }}
+            <br><br>
+            {{ form.email.label }}
+            <br>
+            {{ form.email }}
+            <br><br>
+            {{ form.password.label }}
+            <br>
+            {{ form.password }}
+            <br>
+            {{ form.submit(value="Register") }}
+            </form>
         </div>
     </div>
 </div>
