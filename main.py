@@ -91,7 +91,7 @@ def send_mail_to_self(name, email, mob, msg):
     context = ssl.create_default_context()
     with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as mail:
         mail.login(config("MY_EMAIL"), config("MY_PASSWORD"))
-        mail.sendmail(config("MY_EMAIL"), config("MY_EMAIL"),
+        mail.sendmail(config("MY_EMAIL"), "knowledgehub.blogger@outlook.com",
                       msg=f"Subject:NEW INTEREST\n\nName: {name}\nE-mail: {email}\nMob: {mob}\nMessage = {msg}")
 
 
@@ -153,7 +153,7 @@ def login():
         user = db.session.execute(db.select(User).where(User.email == form.email.data)).first()
 
         if user is None:
-            flash("Please Sign up to continue")
+            flash("Account Not Found. Please Sign up to continue")
             return redirect(url_for("register"))
 
         else:
@@ -178,7 +178,7 @@ def logout():
 def show_post(post_id):
     form = CommentForm()
     if form.validate_on_submit():
-        new_comment = Comments(comment=form.comment.data,
+        new_comment = Comments(comment=form.comment.data.replace('<p>', '').replace('</p>', ''),
                                user_id=current_user.id,
                                blog_id=post_id)
 
@@ -193,6 +193,11 @@ def show_post(post_id):
 
     comments = db.session.execute(
         db.select(Comments.comment, User.name, User.email).join_from(Comments, User).where(Comments.blog_id == post_id))
+    
+    # Uncomment this to delete all Comments
+    # for c in comments:
+    #     db.session.execute(db.delete(Comments))
+    #     db.session.commit()
 
     return render_template("post.html", post=post, comments=comments, form=form)
 
@@ -213,7 +218,9 @@ def contact():
         send_mail_to_user(email)
         send_mail_to_self(name=name, email=email, mob=mob, msg=msg)
 
+        flash("Your request has been sent. You will be attended shortly.")
         return redirect(url_for("get_all_posts"))
+    
     return render_template("contact.html")
 
 

@@ -27,7 +27,26 @@
       <div class="col-lg-8 col-md-10 mx-auto">
         {{ ckeditor.load() }}
         {{ ckeditor.config(name='body') }}
-        {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+        <form action="" method="post">
+          <input id="csrf_token" name="csrf_token" type="hidden" value="{{csrf_token()}}">
+          {{ form.title.label(style="margin-top:20px") }}
+          <br>
+          {{ form.title }}
+          <br><br>
+          {{ form.subtitle.label }}
+          <br>
+          {{ form.subtitle }}
+          <br><br>
+          {{ form.img_url.label }}
+          <br>
+          {{ form.img_url }}
+          <br><br>
+          {{ form.body.label }}
+          <br>
+          {{ form.body }}
+          
+          {{ form.submit(value="Create Post", style="margin-top:20px;") }}
+          </form>
       </div>
     </div>
   </div>

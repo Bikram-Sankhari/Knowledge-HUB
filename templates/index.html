@@ -18,13 +18,16 @@
 
 <!-- Main Content -->
 <div class="container">
+    {% include "message.html" %}
     <div class="row">
+        {% for post in all_posts %}
+        <div class="col-lg-4 col-md-12 mx-auto p-0">
+            <img class="float-right" src="{{post[0].img_url}}" alt="" style="width: 13vw;">
+        </div>
         <div class="col-lg-8 col-md-10 mx-auto">
-            {% include "message.html" %}
-            {% for post in all_posts %}
-            <div class="post-preview" style="margin-top: 20px;">
+            <div class="post-preview">
                 <a href="{{ url_for('show_post', post_id=post[0].id) }}">
-                    <h2 class="post-title">
+                    <h2 class="post-title my-0">
                         {{post[0].title}}
                     </h2>
                     <h3 class="post-subtitle">
@@ -40,18 +43,17 @@
                 </p>
             </div>
             <hr>
-            {% endfor %}
-
-
-            <!-- New Post -->
-            {% if current_user.is_active %}
-            <div class="clearfix">
-                <a class="btn btn-primary float-right" href="{{url_for('add_new_post')}}">Create New Post</a>
-            </div>
-            {% endif %}
         </div>
+        {% endfor %}
+
+
     </div>
 </div>
-<hr>
+<!-- New Post -->
+{% if current_user.is_active %}
+<div class="" style="margin-right: 10rem;">
+    <a class="btn btn-primary float-right" href="{{url_for('add_new_post')}}">Create New Post</a>
+</div>
+{% endif %}
 
 {% include "footer.html" %}
