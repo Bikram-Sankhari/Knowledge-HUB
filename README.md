@@ -18,6 +18,8 @@ With the Deployed version of this Web App:
 - Comment section for each Blog
 - Anonymous Blog view support
 
+**However it is not possible to list down all the tiny but complex functionalities this app can perform. So to have a glance of the working app, watch**  [**this video**](https://youtu.be/b-rTezMyfUY)
+
 ------------
 
 
